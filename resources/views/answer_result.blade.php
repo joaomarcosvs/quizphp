@@ -1,4 +1,4 @@
-<x-main-layout pageTitle="Countries & Capitals QUIZ">
+<x-main-layout pageTitle="Countries & Capitals Quiz">
 
     <div class="container">
 

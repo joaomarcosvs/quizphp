@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
-
 class MainController extends Controller
 {
     private $app_data;
@@ -46,13 +46,12 @@ class MainController extends Controller
         session()->put([
             'quiz' => $quiz,
             'total_questions' => $total_questions,
-            'current_questions' => 1,
+            'current_question' => 1,
             'correct_answers' => 0,
             'wrong_answers' => 0
         ]);
 
         return redirect()->route('game');
-
     }
 
     private function prepareQuiz($total_questions)
@@ -96,7 +95,7 @@ class MainController extends Controller
     {
        $quiz = session('quiz');
        $total_questions = session('total_questions');
-       $current_question = session('current_questions') -1;
+       $current_question = session('current_question') -1;
 
        //prepare answers to show in view
        $answers = $quiz[$current_question]['wrong_answers'];
@@ -122,9 +121,9 @@ class MainController extends Controller
 
         // game logic
         $quiz = session('quiz');
-        $current_question = session('current_questions') - 1;
+        $current_question = session('current_question') - 1;
         $correct_answer = $quiz[$current_question]['correct_answer'];
-        $correct_answers = session('wrong_answers');
+        $correct_answers = session('correct_answers');
         $wrong_answers = session('wrong_answers');
 
         if($answer == $correct_answer) {
@@ -145,7 +144,7 @@ class MainController extends Controller
         //prapare data to show correct answer
         $data = [
             'country' => $quiz[$current_question]['country'],
-            'correct_answer' => $quiz[$current_question]['correct_answer'],
+            'correct_answer' => $correct_answer,
             'choice_answer' => $answer,
             'currentQuestion' => $current_question,
             'totalQuestions' => session('total_questions')
@@ -172,8 +171,14 @@ class MainController extends Controller
 
     public function showResults()
     {
-        echo 'Mostrar resultados';
-        dd(session()->all());
+        $total_questions = session('total_questions');
+
+        return view('final_results')->with([
+            'correct_answers' => session('correct_answers'),
+            'wrong_answers' => session('wrong_answers'),
+            'total_questions' => session('total_questions'),
+            'percentage' => round( session(('correct_answers')) / $total_questions * 100, 2)
+        ]);
     }
 
 }

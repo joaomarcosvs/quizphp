@@ -4,7 +4,6 @@ use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Route;
 
 //start game
-// Rota de get 1.nome da rota 2.de onde vem o metodo 3.nome do metodo 4.nome da rota
 Route::get('/', [MainController::class, 'startGame'])->name('start_game');
 Route::post('/', [MainController::class, 'prepareGame'])->name('prepare_game');
 
