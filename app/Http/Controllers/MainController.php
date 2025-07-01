@@ -153,4 +153,27 @@ class MainController extends Controller
 
         return view('answer_result')->with($data);
     }
+
+    public function nextQuestion()
+    {
+        $current_question = session('current_question');
+        $total_questions = session('total_questions');
+
+        //check if the game is over
+        if($current_question < $total_questions) {
+            $current_question++;
+            session()->put('current_question', $current_question);
+            return redirect()->route('game');
+        }else{
+            //game over
+            return redirect()->route('show_results');
+        }
+    }
+
+    public function showResults()
+    {
+        echo 'Mostrar resultados';
+        dd(session()->all());
+    }
+
 }
